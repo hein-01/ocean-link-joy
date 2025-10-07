@@ -440,6 +440,50 @@ export type Database = {
           },
         ]
       }
+      slots: {
+        Row: {
+          booking_id: string | null
+          created_at: string
+          end_time: string
+          id: string
+          is_booked: boolean
+          resource_id: string
+          slot_price: number
+          start_time: string
+          updated_at: string
+        }
+        Insert: {
+          booking_id?: string | null
+          created_at?: string
+          end_time: string
+          id?: string
+          is_booked?: boolean
+          resource_id: string
+          slot_price: number
+          start_time: string
+          updated_at?: string
+        }
+        Update: {
+          booking_id?: string | null
+          created_at?: string
+          end_time?: string
+          id?: string
+          is_booked?: boolean
+          resource_id?: string
+          slot_price?: number
+          start_time?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "slots_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "business_resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
