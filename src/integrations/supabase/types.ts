@@ -91,6 +91,54 @@ export type Database = {
         }
         Relationships: []
       }
+      business_resources: {
+        Row: {
+          base_price: number | null
+          business_id: string
+          created_at: string
+          id: string
+          max_capacity: number
+          name: string
+          service_id: number
+          updated_at: string
+        }
+        Insert: {
+          base_price?: number | null
+          business_id: string
+          created_at?: string
+          id?: string
+          max_capacity?: number
+          name: string
+          service_id: number
+          updated_at?: string
+        }
+        Update: {
+          base_price?: number | null
+          business_id?: string
+          created_at?: string
+          id?: string
+          max_capacity?: number
+          name?: string
+          service_id?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_resources_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "business_resources_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       business_reviews: {
         Row: {
           business_id: string
