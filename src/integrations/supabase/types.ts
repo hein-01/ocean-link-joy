@@ -351,6 +351,44 @@ export type Database = {
         }
         Relationships: []
       }
+      services: {
+        Row: {
+          category_id: string
+          created_at: string
+          default_duration_min: number | null
+          id: number
+          popular_products: string
+          service_key: string
+          updated_at: string
+        }
+        Insert: {
+          category_id: string
+          created_at?: string
+          default_duration_min?: number | null
+          id?: number
+          popular_products: string
+          service_key: string
+          updated_at?: string
+        }
+        Update: {
+          category_id?: string
+          created_at?: string
+          default_duration_min?: number | null
+          id?: number
+          popular_products?: string
+          service_key?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "services_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "business_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
