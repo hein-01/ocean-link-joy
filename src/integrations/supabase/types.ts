@@ -155,6 +155,7 @@ export type Database = {
           province_district: string | null
           rating: number | null
           receipt_url: string | null
+          searchable_business: boolean
           starting_price: string | null
           tiktok_url: string | null
           towns: string | null
@@ -188,6 +189,7 @@ export type Database = {
           province_district?: string | null
           rating?: number | null
           receipt_url?: string | null
+          searchable_business?: boolean
           starting_price?: string | null
           tiktok_url?: string | null
           towns?: string | null
@@ -221,6 +223,7 @@ export type Database = {
           province_district?: string | null
           rating?: number | null
           receipt_url?: string | null
+          searchable_business?: boolean
           starting_price?: string | null
           tiktok_url?: string | null
           towns?: string | null
@@ -507,6 +510,7 @@ export type Database = {
           province_district: string | null
           rating: number | null
           receipt_url: string | null
+          searchable_business: boolean
           starting_price: string | null
           tiktok_url: string | null
           towns: string | null
