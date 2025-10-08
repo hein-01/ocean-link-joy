@@ -449,28 +449,46 @@ export type Database = {
       services: {
         Row: {
           category_id: string
+          contact_available_start: string | null
+          contact_available_until: string | null
+          contact_phone: string | null
           created_at: string
           default_duration_min: number | null
+          facilities: string | null
           id: number
           popular_products: string
+          rules: string | null
+          service_images: string[] | null
           service_key: string
           updated_at: string
         }
         Insert: {
           category_id: string
+          contact_available_start?: string | null
+          contact_available_until?: string | null
+          contact_phone?: string | null
           created_at?: string
           default_duration_min?: number | null
+          facilities?: string | null
           id?: number
           popular_products: string
+          rules?: string | null
+          service_images?: string[] | null
           service_key: string
           updated_at?: string
         }
         Update: {
           category_id?: string
+          contact_available_start?: string | null
+          contact_available_until?: string | null
+          contact_phone?: string | null
           created_at?: string
           default_duration_min?: number | null
+          facilities?: string | null
           id?: number
           popular_products?: string
+          rules?: string | null
+          service_images?: string[] | null
           service_key?: string
           updated_at?: string
         }
