@@ -67,10 +67,15 @@ const formSchema = z.object({
   streetAddress: z.string().min(1, "Street address is required"),
   province: z.string().min(1, "Province is required"),
   town: z.string().min(1, "Town is required"),
+  nearestBusStop: z.string().optional(),
+  nearestTrainStation: z.string().optional(),
   zipCode: z.string().optional(),
   infoWebsite: z.string().optional(),
   facebook: z.string().optional(),
   tiktok: z.string().optional(),
+  priceCurrency: z.string().default("฿"),
+  posLitePrice: z.string().default("10"),
+  serviceListingPrice: z.string().default("3"),
   posLiteOption: z.enum(["accept", "postpone"]),
   paymentOption: z.enum(["stripe", "bank"]),
 });
@@ -156,10 +161,15 @@ export const FutsalCourtForm = () => {
       streetAddress: "",
       province: "",
       town: "",
+      nearestBusStop: "",
+      nearestTrainStation: "",
       zipCode: "",
       infoWebsite: "",
       facebook: "",
       tiktok: "",
+      priceCurrency: "฿",
+      posLitePrice: "10",
+      serviceListingPrice: "3",
       posLiteOption: "accept",
       paymentOption: "bank",
     },
@@ -168,6 +178,14 @@ export const FutsalCourtForm = () => {
   const numberOfFields = form.watch("numberOfFields");
   const fieldDetails = form.watch("fieldDetails");
   const paymentOption = form.watch("paymentOption");
+  const posLiteOption = form.watch("posLiteOption");
+  const priceCurrency = form.watch("priceCurrency");
+  const posLitePrice = form.watch("posLitePrice");
+  const serviceListingPrice = form.watch("serviceListingPrice");
+
+  const totalAmount = posLiteOption === "accept" 
+    ? (parseInt(posLitePrice) + parseInt(serviceListingPrice)).toString()
+    : serviceListingPrice;
 
   React.useEffect(() => {
     if (numberOfFields) {
@@ -697,10 +715,10 @@ export const FutsalCourtForm = () => {
           </CardContent>
         </Card>
 
-        {/* 7. Business Description */}
+        {/* 7. Service Description */}
         <Card className="border-2 shadow-lg hover:shadow-xl transition-shadow">
           <CardHeader>
-            <CardTitle className="text-xl">Business Description</CardTitle>
+            <CardTitle className="text-xl">Service Description</CardTitle>
           </CardHeader>
           <CardContent>
             <FormField
@@ -708,7 +726,7 @@ export const FutsalCourtForm = () => {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Business Description *</FormLabel>
+                  <FormLabel>Service Description *</FormLabel>
                   <FormControl>
                     <Textarea
                       rows={4}
@@ -972,6 +990,34 @@ export const FutsalCourtForm = () => {
 
             <FormField
               control={form.control}
+              name="nearestBusStop"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nearest Bus Stop name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g ABC Stop" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="nearestTrainStation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nearest Train Station</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g ABC Station" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
               name="zipCode"
               render={({ field }) => (
                 <FormItem>
@@ -1033,6 +1079,29 @@ export const FutsalCourtForm = () => {
                 </FormItem>
               )}
             />
+            
+            {/* Hidden pricing fields */}
+            <FormField
+              control={form.control}
+              name="priceCurrency"
+              render={({ field }) => (
+                <input type="hidden" {...field} />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="posLitePrice"
+              render={({ field }) => (
+                <input type="hidden" {...field} />
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="serviceListingPrice"
+              render={({ field }) => (
+                <input type="hidden" {...field} />
+              )}
+            />
           </CardContent>
         </Card>
 
@@ -1044,13 +1113,13 @@ export const FutsalCourtForm = () => {
           <CardContent className="space-y-6">
             <div className="space-y-4 text-sm text-muted-foreground">
               <p>
-                This listing is valid for one full year (365 days) for a fee of just $3. We take no commission or cut from any successful bookings/transactions made with your customers. The platform will provide access to a booking management system as well as a financial management tool. This tool is essential for tracking and analyzing key calculations, including: Daily/Monthly Sales, Profit, Expenses, and potential Losses.
+                This listing is valid for one full year (365 days) for a fee of just {priceCurrency}{serviceListingPrice}. We take no commission or cut from any successful bookings/transactions made with your customers. The platform will provide access to a booking management system as well as a financial management tool. This tool is essential for tracking and analyzing key calculations, including: Daily/Monthly Sales, Profit, Expenses, and potential Losses.
               </p>
               
               <div className="space-y-2">
                 <h4 className="font-semibold text-foreground">POS Lite</h4>
                 <p>
-                  If you plan to sell physical items (such as drinks, snacks, rental shoes, balls, or shirts), we recommend the POS Lite system for just $10 per year. Your Booking Management System, which comes with your service listing, manages your schedule and time slots. POS Lite, however, handles the entire retail side and your tangible goods by tracking your inventory instantly to prevent stockouts and waste, providing quick payment processing (cash, card, mobile) for faster customer checkout, speeding up sales with barcode scanning using a phone camera.
+                  If you plan to sell physical items (such as drinks, snacks, rental shoes, balls, or shirts), we recommend the POS Lite system for just {priceCurrency}{posLitePrice} per year. Your Booking Management System, which comes with your service listing, manages your schedule and time slots. POS Lite, however, handles the entire retail side and your tangible goods by tracking your inventory instantly to prevent stockouts and waste, providing quick payment processing (cash, card, mobile) for faster customer checkout, speeding up sales with barcode scanning using a phone camera.
                 </p>
                 <p>
                   The benefits of combining all your business data into a single online database are enormous. Sales revenue from physical goods is now recorded in real-time and immediately combined with your rental income. It will enable Owners and staff gain immediate, complete control over bookings, and money(real-time cash flow) from any device (laptop, mobile, tablet), anywhere, at any time. Live Stock Management: When a drink is sold using POS Lite, the inventory count updates instantly. Staff know immediately if they need to reorder stock without checking a clipboard, allowing them to make proactive decisions
@@ -1072,7 +1141,7 @@ export const FutsalCourtForm = () => {
                       <div className="flex items-start space-x-3">
                         <RadioGroupItem value="accept" id="accept-pos" className="mt-1" />
                         <Label htmlFor="accept-pos" className="font-normal cursor-pointer">
-                          Okay, I will accept your offer of POS Lite at $10/year.
+                          Okay, I will accept your offer of POS Lite at {priceCurrency}{posLitePrice}/year.
                         </Label>
                       </div>
                       <div className="flex items-start space-x-3">
@@ -1095,7 +1164,7 @@ export const FutsalCourtForm = () => {
           <CardHeader>
             <CardTitle className="text-2xl">Payment Options</CardTitle>
             <p className="text-sm text-muted-foreground mt-2">
-              The total is $1000. Kindly choose one of the following digital payment methods.
+              The total is {priceCurrency}{totalAmount}. Kindly choose one of the following digital payment methods.
             </p>
           </CardHeader>
           <CardContent className="space-y-4">
