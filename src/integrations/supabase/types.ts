@@ -230,6 +230,7 @@ export type Database = {
           description: string | null
           email: string | null
           facebook_page: string | null
+          google_map_location: string | null
           id: string
           image_url: string | null
           information_website: string | null
@@ -241,13 +242,16 @@ export type Database = {
           owner_id: string
           payment_status: string
           phone: string | null
+          pos_lite_price: string | null
           "POS+Website": number | null
+          price_currency: string | null
           product_images: string[] | null
           products_catalog: string | null
           province_district: string | null
           rating: number | null
           receipt_url: string | null
           searchable_business: boolean
+          service_listing_price: string | null
           starting_price: string | null
           tiktok_url: string | null
           towns: string | null
@@ -264,6 +268,7 @@ export type Database = {
           description?: string | null
           email?: string | null
           facebook_page?: string | null
+          google_map_location?: string | null
           id?: string
           image_url?: string | null
           information_website?: string | null
@@ -275,13 +280,16 @@ export type Database = {
           owner_id: string
           payment_status?: string
           phone?: string | null
+          pos_lite_price?: string | null
           "POS+Website"?: number | null
+          price_currency?: string | null
           product_images?: string[] | null
           products_catalog?: string | null
           province_district?: string | null
           rating?: number | null
           receipt_url?: string | null
           searchable_business?: boolean
+          service_listing_price?: string | null
           starting_price?: string | null
           tiktok_url?: string | null
           towns?: string | null
@@ -298,6 +306,7 @@ export type Database = {
           description?: string | null
           email?: string | null
           facebook_page?: string | null
+          google_map_location?: string | null
           id?: string
           image_url?: string | null
           information_website?: string | null
@@ -309,13 +318,16 @@ export type Database = {
           owner_id?: string
           payment_status?: string
           phone?: string | null
+          pos_lite_price?: string | null
           "POS+Website"?: number | null
+          price_currency?: string | null
           product_images?: string[] | null
           products_catalog?: string | null
           province_district?: string | null
           rating?: number | null
           receipt_url?: string | null
           searchable_business?: boolean
+          service_listing_price?: string | null
           starting_price?: string | null
           tiktok_url?: string | null
           towns?: string | null
@@ -498,6 +510,7 @@ export type Database = {
           rules: string | null
           service_images: string[] | null
           service_key: string
+          services_description: string | null
           updated_at: string
         }
         Insert: {
@@ -513,6 +526,7 @@ export type Database = {
           rules?: string | null
           service_images?: string[] | null
           service_key: string
+          services_description?: string | null
           updated_at?: string
         }
         Update: {
@@ -528,6 +542,7 @@ export type Database = {
           rules?: string | null
           service_images?: string[] | null
           service_key?: string
+          services_description?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -688,6 +703,7 @@ export type Database = {
           description: string | null
           email: string | null
           facebook_page: string | null
+          google_map_location: string | null
           id: string
           image_url: string | null
           information_website: string | null
@@ -699,13 +715,16 @@ export type Database = {
           owner_id: string
           payment_status: string
           phone: string | null
+          pos_lite_price: string | null
           "POS+Website": number | null
+          price_currency: string | null
           product_images: string[] | null
           products_catalog: string | null
           province_district: string | null
           rating: number | null
           receipt_url: string | null
           searchable_business: boolean
+          service_listing_price: string | null
           starting_price: string | null
           tiktok_url: string | null
           towns: string | null
