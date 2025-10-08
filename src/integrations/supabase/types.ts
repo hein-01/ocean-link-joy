@@ -177,6 +177,50 @@ export type Database = {
           },
         ]
       }
+      business_schedules: {
+        Row: {
+          applies_to_date: string | null
+          close_time: string
+          created_at: string
+          day_of_week: number
+          id: string
+          is_open: boolean
+          open_time: string
+          resource_id: string
+          updated_at: string
+        }
+        Insert: {
+          applies_to_date?: string | null
+          close_time: string
+          created_at?: string
+          day_of_week: number
+          id?: string
+          is_open?: boolean
+          open_time: string
+          resource_id: string
+          updated_at?: string
+        }
+        Update: {
+          applies_to_date?: string | null
+          close_time?: string
+          created_at?: string
+          day_of_week?: number
+          id?: string
+          is_open?: boolean
+          open_time?: string
+          resource_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_schedules_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "business_resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       businesses: {
         Row: {
           address: string | null
@@ -448,6 +492,7 @@ export type Database = {
           id: string
           is_booked: boolean
           resource_id: string
+          slot_name: string | null
           slot_price: number
           start_time: string
           updated_at: string
@@ -459,6 +504,7 @@ export type Database = {
           id?: string
           is_booked?: boolean
           resource_id: string
+          slot_name?: string | null
           slot_price: number
           start_time: string
           updated_at?: string
@@ -470,6 +516,7 @@ export type Database = {
           id?: string
           is_booked?: boolean
           resource_id?: string
+          slot_name?: string | null
           slot_price?: number
           start_time?: string
           updated_at?: string
