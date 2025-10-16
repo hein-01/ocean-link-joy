@@ -1,0 +1,255 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 254 88% 67%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --navbar: 240 20% 96.5%;
+    --nav-text: 210 20% 28%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    --footer-background: 210 25% 97%;
+    
+    /* Dashboard Enhancement Colors */
+    --dashboard-bg: 254 100% 99%;
+    --dashboard-card-bg: 0 0% 100%;
+    --dashboard-accent: 254 100% 97%;
+    --dashboard-gradient-start: 254 88% 67%;
+    --dashboard-gradient-end: 220 70% 65%;
+    --dashboard-stat-bg: 254 100% 98%;
+    --dashboard-shadow: 254 30% 85%;
+    
+     /* Quick Actions Card Colors */
+     --quick-actions-manage: 229 100% 97%;
+     --quick-actions-manage-foreground: 229 84% 25%;
+     --quick-actions-manage-hover: 229 100% 90%;
+     --quick-actions-saved: 315 60% 95%;
+     --quick-actions-saved-foreground: 315 70% 30%;
+     --quick-actions-saved-hover: 315 60% 88%;
+      --quick-actions-website: 140 50% 96%;
+      --quick-actions-website-foreground: 140 60% 25%;
+      --quick-actions-website-hover: 140 50% 89%;
+      --quick-actions-service: 280 60% 95%;
+      --quick-actions-service-foreground: 280 70% 30%;
+      --quick-actions-service-hover: 280 60% 88%;
+      --quick-actions-bookings: 195 70% 95%;
+      --quick-actions-bookings-foreground: 195 85% 25%;
+      --quick-actions-bookings-hover: 195 70% 88%;
+     
+     /* Enhanced Form Field Colors */
+    --form-field-border: 214.3 31.8% 85%;
+    --form-field-border-hover: 214.3 31.8% 78%;
+    --form-field-shadow: 254 30% 95%;
+    --form-upload-bg: 254 100% 98%;
+    --form-upload-border: 254 60% 85%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 254 88% 67%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    
+    --navbar: 240 20% 96.5%;
+    --nav-text: 210 20% 28%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Dark mode dashboard colors */
+    --dashboard-bg: 222.2 84% 4.9%;
+    --dashboard-card-bg: 217.2 32.6% 17.5%;
+    --dashboard-accent: 217.2 32.6% 25%;
+    --dashboard-gradient-start: 254 88% 67%;
+    --dashboard-gradient-end: 220 70% 65%;
+    --dashboard-stat-bg: 217.2 32.6% 20%;
+    --dashboard-shadow: 217.2 32.6% 8%;
+    
+     /* Dark mode Quick Actions Card Colors */
+     --quick-actions-manage: 229 50% 15%;
+     --quick-actions-manage-foreground: 229 90% 80%;
+     --quick-actions-manage-hover: 229 50% 22%;
+     --quick-actions-saved: 315 40% 18%;
+     --quick-actions-saved-foreground: 315 80% 85%;
+     --quick-actions-saved-hover: 315 40% 25%;
+      --quick-actions-website: 140 40% 18%;
+      --quick-actions-website-foreground: 140 70% 80%;
+      --quick-actions-website-hover: 140 40% 25%;
+      --quick-actions-service: 280 40% 18%;
+      --quick-actions-service-foreground: 280 80% 85%;
+      --quick-actions-service-hover: 280 40% 25%;
+      --quick-actions-bookings: 195 50% 15%;
+      --quick-actions-bookings-foreground: 195 85% 80%;
+      --quick-actions-bookings-hover: 195 50% 22%;
+   }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Animated gradient border for GIF */
+@keyframes gradient-border {
+  0% {
+    background: linear-gradient(45deg, #6b7280, #8b5cf6, #ec4899, #6b7280);
+  }
+  25% {
+    background: linear-gradient(45deg, #8b5cf6, #ec4899, #f59e0b, #8b5cf6);
+  }
+  50% {
+    background: linear-gradient(45deg, #ec4899, #f59e0b, #10b981, #ec4899);
+  }
+  75% {
+    background: linear-gradient(45deg, #f59e0b, #10b981, #3b82f6, #f59e0b);
+  }
+  100% {
+    background: linear-gradient(45deg, #6b7280, #8b5cf6, #ec4899, #6b7280);
+  }
+}
+
+.animated-gradient-border {
+  position: relative;
+  border-radius: 50%;
+  padding: 4px;
+  background: linear-gradient(45deg, #6b7280, #8b5cf6, #ec4899, #6b7280);
+  background-size: 300% 300%;
+  animation: gradient-border 3s ease infinite;
+}
+
+.animated-gradient-border img {
+  border-radius: 50%;
+  display: block;
+}
+
+/* Logo glow animation */
+@keyframes glow {
+  0% {
+    filter: drop-shadow(0 0 5px hsl(var(--primary))) brightness(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 20px hsl(var(--primary))) drop-shadow(0 0 30px hsla(220, 70%, 65%, 0.8)) brightness(1.2);
+  }
+  100% {
+    filter: drop-shadow(0 0 5px hsl(var(--primary))) brightness(1);
+  }
+}
+
+/* Custom Swiper pagination styles for Popular Businesses */
+.popular-businesses-swiper .swiper-pagination {
+  position: relative !important;
+  margin-top: 20px !important;
+  bottom: auto !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.popular-businesses-swiper-mobile .swiper-pagination {
+  position: relative !important;
+  margin-top: 20px !important;
+  bottom: auto !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.popular-businesses-swiper .swiper-pagination-bullet,
+.popular-businesses-swiper-mobile .swiper-pagination-bullet {
+  width: 8px !important;
+  height: 8px !important;
+  background: hsl(var(--muted-foreground)) !important;
+  opacity: 0.4 !important;
+  border-radius: 50% !important;
+  margin: 0 !important;
+}
+
+.popular-businesses-swiper .swiper-pagination-bullet-active,
+.popular-businesses-swiper-mobile .swiper-pagination-bullet-active {
+  background: hsl(var(--primary)) !important;
+  opacity: 1 !important;
+}
