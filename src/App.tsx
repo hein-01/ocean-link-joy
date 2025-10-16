@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import BusinessDetail from "./pages/BusinessDetail";
 import BusinessDirectory from "./pages/BusinessDirectory";
 import FindShops from "./pages/FindShops";
+import FindServices from "./pages/FindServices";
 import ListBusiness from "./pages/ListBusiness";
 import ServiceSelection from "./pages/ServiceSelection";
 import FutsalCourtListing from "./pages/FutsalCourtListing";
@@ -38,6 +39,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/businesses" element={<BusinessDirectory />} />
+            <Route path="/find-services" element={<FindServices />} />
             <Route path="/find-shops" element={<FindShops />} />
             <Route path="/business/:id" element={<BusinessDetail />} />
             <Route path="/list-business" element={<ListBusiness />} />

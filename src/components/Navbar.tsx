@@ -48,6 +48,12 @@ export const Navbar = React.memo(() => {
           {/* Desktop Right Side Actions */}
           <div className="hidden md:flex items-center space-x-4">
             <Link
+              to="/find-services"
+              className="text-nav-text hover:text-nav-text/80 font-medium transition-colors"
+            >
+              Find Services
+            </Link>
+            <Link
               to="/find-shops"
               className="text-nav-text hover:text-nav-text/80 font-medium transition-colors"
             >
