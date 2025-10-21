@@ -10,11 +10,16 @@ export async function fetchServicePaymentMethods(
   serviceId: number
 ): Promise<ServicePaymentMethod[]> {
   try {
+    console.log('=== fetchServicePaymentMethods called ===');
+    console.log('Input serviceId:', serviceId);
+    
     // Step 1: Get all business_ids that offer this service
     const { data: businessResources, error: resourceError } = await supabase
       .from('business_resources')
       .select('business_id')
       .eq('service_id', serviceId);
+
+    console.log('Business resources query result:', { businessResources, resourceError });
 
     if (resourceError) {
       console.error('Error fetching business resources:', resourceError);
@@ -22,11 +27,13 @@ export async function fetchServicePaymentMethods(
     }
 
     if (!businessResources || businessResources.length === 0) {
+      console.log('No business resources found for service_id:', serviceId);
       return [];
     }
 
     // Extract unique business IDs
     const businessIds = [...new Set(businessResources.map(r => r.business_id))];
+    console.log('Unique business IDs:', businessIds);
 
     // Step 2: Fetch payment methods for all these businesses
     const { data: paymentMethods, error: paymentError } = await supabase
@@ -34,12 +41,15 @@ export async function fetchServicePaymentMethods(
       .select('method_type, account_name, account_number')
       .in('business_id', businessIds);
 
+    console.log('Payment methods query result:', { paymentMethods, paymentError });
+
     if (paymentError) {
       console.error('Error fetching payment methods:', paymentError);
       return [];
     }
 
     if (!paymentMethods || paymentMethods.length === 0) {
+      console.log('No payment methods found for business IDs:', businessIds);
       return [];
     }
 
@@ -51,6 +61,7 @@ export async function fetchServicePaymentMethods(
       )
     );
 
+    console.log('Returning unique payment methods:', uniqueMethods);
     return uniqueMethods;
   } catch (error) {
     console.error('Unexpected error fetching payment methods:', error);

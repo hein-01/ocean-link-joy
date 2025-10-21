@@ -190,21 +190,30 @@ export const PopularServiceCard = ({ service }: PopularServiceCardProps) => {
   // Fetch payment methods for the service
   useEffect(() => {
     const loadPaymentMethods = async () => {
+      console.log('=== Payment Methods Debug ===');
+      console.log('Raw service.id:', service.id);
+      console.log('Type of service.id:', typeof service.id);
+      
       // Validate and convert service.id to number
       const serviceId = typeof service.id === 'number' ? service.id : parseInt(service.id, 10);
       
+      console.log('Parsed serviceId:', serviceId);
+      console.log('Is NaN?', isNaN(serviceId));
+      
       if (isNaN(serviceId)) {
-        console.error('Invalid service ID type:', service.id);
+        console.error('Invalid service ID type - cannot parse to integer:', service.id);
         return;
       }
 
-      console.log('Fetching payment methods for Service ID:', serviceId);
+      console.log('Calling fetchServicePaymentMethods with:', serviceId);
 
       // Use the utility function that correctly handles the multi-table joins
       const data = await fetchServicePaymentMethods(serviceId);
 
+      console.log('Payment methods returned from utility:', data);
+
       if (data && data.length > 0) {
-        console.log('Payment methods found:', data);
+        console.log('Setting payment methods:', data);
         setPaymentMethods(data);
       } else {
         console.log('No payment methods found for Service ID:', serviceId);
