@@ -14,6 +14,7 @@ import { Navigation, Pagination } from 'swiper/modules';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { formatDateWithOrdinal } from '@/lib/dateUtils';
+import { fetchServicePaymentMethods } from '@/lib/paymentUtils';
 import AuthModal from './AuthModal';
 import { InlineAuthForm } from './InlineAuthForm';
 import 'swiper/css';
@@ -189,41 +190,30 @@ export const PopularServiceCard = ({ service }: PopularServiceCardProps) => {
   // Fetch payment methods for the service
   useEffect(() => {
     const loadPaymentMethods = async () => {
-      try {
-        // Extract business UUID from service ID
-        // Format: "service_futsal_booking_{uuid}_{uuid}"
-        const uuidRegex = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
-        const match = service.id.match(uuidRegex);
-        const businessId = match ? match[0] : null;
+      // Validate and convert service.id to number
+      const serviceId = typeof service.id === 'number' ? service.id : parseInt(service.id, 10);
+      
+      if (isNaN(serviceId)) {
+        console.error('Invalid service ID type:', service.id);
+        return;
+      }
 
-        console.log('Extracting payment methods for service:', service.id);
-        console.log('Business ID extracted:', businessId);
+      console.log('Fetching payment methods for Service ID:', serviceId);
 
-        if (!businessId) {
-          console.log('No business ID found in service ID');
-          return;
-        }
+      // Use the utility function that correctly handles the multi-table joins
+      const data = await fetchServicePaymentMethods(serviceId);
 
-        // Fetch payment methods directly using business_id
-        const { data, error } = await supabase
-          .from('payment_methods')
-          .select('method_type, account_name, account_number')
-          .eq('business_id', businessId);
-
-        if (error) {
-          console.error('Error fetching payment methods:', error);
-        } else if (data && data.length > 0) {
-          console.log('Payment methods found:', data);
-          setPaymentMethods(data);
-        } else {
-          console.log('No payment methods found for business:', businessId);
-        }
-      } catch (error) {
-        console.error('Error loading payment methods:', error);
+      if (data && data.length > 0) {
+        console.log('Payment methods found:', data);
+        setPaymentMethods(data);
+      } else {
+        console.log('No payment methods found for Service ID:', serviceId);
       }
     };
 
-    loadPaymentMethods();
+    if (service.id) {
+      loadPaymentMethods();
+    }
   }, [service.id]);
 
   const checkBookmarkStatus = async () => {
