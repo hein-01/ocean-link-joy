@@ -1,1 +1,0 @@
-DELETE FROM businesses WHERE name = 'My Shop 1';
