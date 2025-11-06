@@ -860,9 +860,8 @@ export const PopularServiceCard = ({ service }: PopularServiceCardProps) => {
           <Button
             className="w-full h-8 text-xs flex items-center justify-center gap-1"
             onClick={() => {
-              if (firstResourceId) {
-                const today = formatDate(new Date(), 'yyyy-MM-dd');
-                navigate(`/availability?resourceId=${firstResourceId}&date=${today}`);
+              if (service.business_id) {
+                navigate(`/booking-availability?businessId=${service.business_id}`);
               } else if (service.website) {
                 window.open(service.website, '_blank');
               }
