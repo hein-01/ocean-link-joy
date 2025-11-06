@@ -58,7 +58,7 @@ const App = () => (
             {/* Service availability demo route (accepts ?resourceId=&date=YYYY-MM-DD) */}
             <Route path="/availability" element={<ServiceAvailability />} />
             {/* Booking availability route (accepts ?businessId=) */}
-            <Route path="/booking" element={<BookingAvailability />} />
+            <Route path="/booking-availability" element={<BookingAvailability />} />
             <Route path="/auth/signin" element={<Auth />} />
             <Route path="/auth/signup" element={<Auth />} />
             <Route path="/auth/callback" element={<AuthCallback />} />
