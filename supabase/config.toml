@@ -1,0 +1,10 @@
+project_id = "mfclqtbudstlthtnhqpj"
+
+[functions.generate-slots]
+verify_jwt = false
+
+[functions.submit-futsal-listing]
+verify_jwt = false
+
+[functions.send-admin-confirmation]
+verify_jwt = false
