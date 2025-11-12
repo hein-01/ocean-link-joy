@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useTypingEffect } from "@/hooks/useTypingEffect";
+import { useAuth } from "@/hooks/useAuth";
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -63,7 +64,9 @@ export default function FindServices() {
   const [deliveryFilter, setDeliveryFilter] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [userBusinessIds, setUserBusinessIds] = useState<string[]>([]);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const ITEMS_PER_PAGE = 6;
   
@@ -87,12 +90,29 @@ export default function FindServices() {
 
   useEffect(() => {
     fetchCategories();
+    fetchUserBusinesses();
     
     const urlSearchTerm = searchParams.get('search');
     if (urlSearchTerm) {
       setSearchTerm(urlSearchTerm);
     }
-  }, [searchParams]);
+  }, [searchParams, user]);
+
+  const fetchUserBusinesses = async () => {
+    if (!user) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from("businesses")
+        .select("id")
+        .eq("owner_id", user.id);
+
+      if (error) throw error;
+      setUserBusinessIds((data || []).map(b => b.id));
+    } catch (error) {
+      console.error("Error fetching user businesses:", error);
+    }
+  };
 
   useEffect(() => {
     setCurrentPage(0);
@@ -193,7 +213,14 @@ export default function FindServices() {
 
       if (error) throw error;
 
-      const servicesData: Service[] = (data || []).map((service: any): Service => {
+      const servicesData: Service[] = (data || [])
+        .filter((service: any) => {
+          const businessResource = service.business_resources?.[0];
+          const businessId = businessResource?.business_id;
+          // Filter out services belonging to the current user's businesses
+          return !businessId || !userBusinessIds.includes(businessId);
+        })
+        .map((service: any): Service => {
         const businessResource = service.business_resources?.[0];
         const business = businessResource?.businesses;
         

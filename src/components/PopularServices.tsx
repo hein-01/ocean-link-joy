@@ -8,6 +8,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Service {
   id: string;
@@ -40,10 +41,34 @@ interface Service {
 const PopularServices = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
+  const [userBusinessIds, setUserBusinessIds] = useState<string[]>([]);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      fetchUserBusinesses();
+    }
+  }, [user]);
 
   useEffect(() => {
     fetchServices();
-  }, []);
+  }, [userBusinessIds]);
+
+  const fetchUserBusinesses = async () => {
+    if (!user) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from("businesses")
+        .select("id")
+        .eq("owner_id", user.id);
+
+      if (error) throw error;
+      setUserBusinessIds((data || []).map(b => b.id));
+    } catch (error) {
+      console.error("Error fetching user businesses:", error);
+    }
+  };
 
   const fetchServices = async () => {
     try {
@@ -168,10 +193,12 @@ const PopularServices = () => {
       }
 
       // Attach payment methods to each service
-      const enriched = servicesWithBusinessData.map(s => ({
-        ...s,
-        payment_methods: s.business_id ? (paymentMap[s.business_id] || []) : [],
-      }));
+      const enriched = servicesWithBusinessData
+        .filter(s => !s.business_id || !userBusinessIds.includes(s.business_id))
+        .map(s => ({
+          ...s,
+          payment_methods: s.business_id ? (paymentMap[s.business_id] || []) : [],
+        }));
 
       console.log('Services with business data:', enriched);
       setServices(enriched);

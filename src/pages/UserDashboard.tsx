@@ -40,6 +40,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -76,7 +77,7 @@ export default function UserDashboard() {
   const [modalType, setModalType] = React.useState<'upgrade' | 'pos-website'>('upgrade');
   const [listingPrice, setListingPrice] = React.useState("");
   const [odooPrice, setOdooPrice] = React.useState("");
-  const [pendingBookings, setPendingBookings] = React.useState([]);
+  const [pendingBookings, setPendingBookings] = React.useState<any[]>([]);
   const [loadingPendingBookings, setLoadingPendingBookings] = React.useState(false);
 
   const fetchUserBusinesses = async () => {
@@ -176,7 +177,8 @@ export default function UserDashboard() {
     
     setLoadingPendingBookings(true);
     try {
-      const { data, error } = await supabase
+      // Fetch bookings where user is the customer
+      const { data: customerBookings, error: customerError } = await supabase
         .from('bookings')
         .select(`
           id,
@@ -184,11 +186,14 @@ export default function UserDashboard() {
           payment_amount,
           created_at,
           resource_id,
+          user_id,
           business_resources (
             name,
             business_id,
             businesses (
-              name
+              id,
+              name,
+              owner_id
             )
           )
         `)
@@ -196,12 +201,48 @@ export default function UserDashboard() {
         .eq('status', 'Pending')
         .order('created_at', { ascending: false });
       
-      if (error) {
-        console.error('Error fetching pending bookings:', error);
+      if (customerError) {
+        console.error('Error fetching customer bookings:', customerError);
+        setPendingBookings([]);
+        setLoadingPendingBookings(false);
         return;
       }
+
+      // Fetch bookings where user is the business owner
+      const { data: ownerBookings, error: ownerError } = await supabase
+        .from('bookings')
+        .select(`
+          id,
+          status,
+          payment_amount,
+          created_at,
+          resource_id,
+          user_id,
+          business_resources!inner (
+            name,
+            business_id,
+            businesses!inner (
+              id,
+              name,
+              owner_id
+            )
+          )
+        `)
+        .eq('business_resources.businesses.owner_id', user.id)
+        .eq('status', 'Pending')
+        .order('created_at', { ascending: false });
+
+      if (ownerError) {
+        console.error('Error fetching owner bookings:', ownerError);
+      }
+
+      // Combine both arrays and remove duplicates
+      const allBookings = [...(customerBookings || []), ...(ownerBookings || [])];
+      const uniqueBookings = allBookings.filter((booking, index, self) => 
+        index === self.findIndex(b => b.id === booking.id)
+      );
       
-      setPendingBookings(data || []);
+      setPendingBookings(uniqueBookings);
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -216,6 +257,69 @@ export default function UserDashboard() {
       fetchPlanPrices();
       fetchPendingBookings();
     }
+  }, [user?.id]);
+
+  // Real-time subscription for new bookings
+  React.useEffect(() => {
+    if (!user?.id) return;
+
+    console.log('Setting up real-time subscription for bookings');
+
+    const channel = supabase
+      .channel('pending_bookings_realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'bookings'
+        },
+        async (payload) => {
+          console.log('New booking detected:', payload);
+          
+          // Check if this booking belongs to user's business
+          const newBooking = payload.new as any;
+          
+          // Fetch the resource to check business ownership
+          const { data: resourceData } = await supabase
+            .from('business_resources')
+            .select('business_id, businesses!inner(owner_id)')
+            .eq('id', newBooking.resource_id)
+            .maybeSingle();
+
+          const isOwner = resourceData?.businesses?.owner_id === user.id;
+          const isCustomer = newBooking.user_id === user.id;
+
+          if (isOwner || isCustomer) {
+            // Show toast notification for owner
+            if (isOwner) {
+              console.log('New booking for owned business, refreshing list');
+            }
+            
+            // Refresh pending bookings list
+            fetchPendingBookings();
+          }
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'bookings'
+        },
+        (payload) => {
+          console.log('Booking updated:', payload);
+          // Refresh when status changes
+          fetchPendingBookings();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      console.log('Cleaning up real-time subscription');
+      supabase.removeChannel(channel);
+    };
   }, [user?.id]);
 
   const fetchBookmarkedBusinesses = async () => {
@@ -598,6 +702,9 @@ export default function UserDashboard() {
                             <TableRow key={booking.id}>
                               <TableCell className="font-medium">
                                 {booking.business_resources?.businesses?.name || 'N/A'}
+                                {booking.business_resources?.businesses?.owner_id === user?.id && (
+                                  <Badge variant="outline" className="ml-2">Owner</Badge>
+                                )}
                               </TableCell>
                               <TableCell>
                                 {booking.business_resources?.name || 'N/A'}
