@@ -424,7 +424,7 @@ export default function ServiceAvailability(props: ServiceAvailabilityProps) {
         )
       );
 
-      navigate(`/bookings/${result.bookingId}/pending`);
+      navigate("/dashboard");
     } finally {
       setIsSubmittingBooking(false);
     }

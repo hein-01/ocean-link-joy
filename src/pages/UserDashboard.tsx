@@ -8,7 +8,7 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { supabase } from "@/integrations/supabase/client";
 import BusinessForm from "@/components/BusinessForm";
 import UpgradeModal from "@/components/UpgradeModal";
-import { addDays, format } from "date-fns";
+import { addDays, addHours, format } from "date-fns";
 import { formatDateWithOrdinal } from "@/lib/dateUtils";
 import { 
   User, 
@@ -76,6 +76,8 @@ export default function UserDashboard() {
   const [modalType, setModalType] = React.useState<'upgrade' | 'pos-website'>('upgrade');
   const [listingPrice, setListingPrice] = React.useState("");
   const [odooPrice, setOdooPrice] = React.useState("");
+  const [pendingBookings, setPendingBookings] = React.useState([]);
+  const [loadingPendingBookings, setLoadingPendingBookings] = React.useState(false);
 
   const fetchUserBusinesses = async () => {
     if (!user?.id) return;
@@ -169,11 +171,50 @@ export default function UserDashboard() {
     }
   };
 
+  const fetchPendingBookings = async () => {
+    if (!user?.id) return;
+    
+    setLoadingPendingBookings(true);
+    try {
+      const { data, error } = await supabase
+        .from('bookings')
+        .select(`
+          id,
+          status,
+          payment_amount,
+          created_at,
+          resource_id,
+          business_resources (
+            name,
+            business_id,
+            businesses (
+              name
+            )
+          )
+        `)
+        .eq('user_id', user.id)
+        .eq('status', 'Pending')
+        .order('created_at', { ascending: false });
+      
+      if (error) {
+        console.error('Error fetching pending bookings:', error);
+        return;
+      }
+      
+      setPendingBookings(data || []);
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setLoadingPendingBookings(false);
+    }
+  };
+
   React.useEffect(() => {
     if (user?.id) {
       fetchDashboardCounts();
       fetchUserBusinesses();
       fetchPlanPrices();
+      fetchPendingBookings();
     }
   }, [user?.id]);
 
@@ -520,6 +561,81 @@ export default function UserDashboard() {
                   </div>
                 </Button>
               </div>
+            </div>
+
+            {/* Pending Bookings Section */}
+            <div className="animate-slide-up">
+              <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                <Calendar className="h-5 w-5 text-primary" />
+                Pending Bookings
+              </h3>
+              {loadingPendingBookings ? (
+                <LoadingSpinner />
+              ) : pendingBookings.length > 0 ? (
+                <Card>
+                  <CardContent className="p-0">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Business</TableHead>
+                          <TableHead>Resource</TableHead>
+                          <TableHead>Amount</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead>Submitted</TableHead>
+                          <TableHead>Time Remaining</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {pendingBookings.map((booking) => {
+                          const createdAt = new Date(booking.created_at);
+                          const confirmationWindowEnd = addHours(createdAt, 2);
+                          const now = new Date();
+                          const timeRemaining = confirmationWindowEnd > now 
+                            ? `${Math.ceil((confirmationWindowEnd.getTime() - now.getTime()) / (1000 * 60))} min`
+                            : 'Expired';
+                          
+                          return (
+                            <TableRow key={booking.id}>
+                              <TableCell className="font-medium">
+                                {booking.business_resources?.businesses?.name || 'N/A'}
+                              </TableCell>
+                              <TableCell>
+                                {booking.business_resources?.name || 'N/A'}
+                              </TableCell>
+                              <TableCell>
+                                {new Intl.NumberFormat("en-US", {
+                                  style: "currency",
+                                  currency: "MMK",
+                                  maximumFractionDigits: 0,
+                                }).format(Number(booking.payment_amount || 0))}
+                              </TableCell>
+                              <TableCell>
+                                <span className="px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded text-xs font-medium">
+                                  {booking.status}
+                                </span>
+                              </TableCell>
+                              <TableCell className="text-sm text-muted-foreground">
+                                {format(createdAt, "dd MMM yyyy, h:mm a")}
+                              </TableCell>
+                              <TableCell className={timeRemaining === 'Expired' ? 'text-destructive' : 'text-muted-foreground'}>
+                                {timeRemaining}
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </CardContent>
+                </Card>
+              ) : (
+                <Card>
+                  <CardContent className="pt-6">
+                    <p className="text-muted-foreground text-center py-8">
+                      No pending bookings at the moment.
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
             </div>
             
             {/* Upgrade Listings Section */}
