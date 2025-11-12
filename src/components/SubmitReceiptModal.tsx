@@ -103,6 +103,18 @@ export function SubmitReceiptModal({
       return;
     }
 
+    // Check file size (1MB = 1024 * 1024 bytes)
+    const maxSize = 1024 * 1024; // 1MB
+    if (file.size > maxSize) {
+      toast({
+        title: "File too large",
+        description: "Receipt image must be less than 1MB. Please compress or resize your image.",
+        variant: "destructive",
+      });
+      event.target.value = "";
+      return;
+    }
+
     setReceiptFile(file);
     const url = URL.createObjectURL(file);
     setPreviewUrl((prev) => {
@@ -217,7 +229,7 @@ export function SubmitReceiptModal({
                   <Upload className="h-8 w-8 text-primary" />
                   <div>
                     <p className="text-sm font-semibold text-foreground">Select receipt image</p>
-                    <p className="text-xs text-muted-foreground">PNG, JPG, or JPEG up to 10MB</p>
+                    <p className="text-xs text-muted-foreground">PNG, JPG, or JPEG (max 1MB)</p>
                   </div>
                   <Input id="receipt-upload" type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
                 </Label>
