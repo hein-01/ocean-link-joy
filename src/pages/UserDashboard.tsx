@@ -765,11 +765,22 @@ export default function UserDashboard() {
                             const slotStartTime = booking.slots?.start_time ? new Date(booking.slots.start_time) : null;
                             const slotEndTime = booking.slots?.end_time ? new Date(booking.slots.end_time) : null;
                             
-                            // Apply same naming priority as PopularServices
+                            // Combine service name and business name
                             const businessName = booking.business_resources?.businesses?.name;
                             const servicePopularProducts = booking.business_resources?.services?.popular_products;
                             const resourceName = booking.business_resources?.name;
-                            const displayName = businessName || servicePopularProducts || resourceName || 'N/A';
+                            
+                            let displayName = 'N/A';
+                            if (servicePopularProducts && businessName) {
+                              displayName = `[${servicePopularProducts}] ${businessName}`;
+                            } else if (businessName) {
+                              displayName = businessName;
+                            } else if (servicePopularProducts) {
+                              displayName = servicePopularProducts;
+                            } else if (resourceName) {
+                              displayName = resourceName;
+                            }
+                            
                             const fieldName = resourceName || 'N/A';
                             
                             return (
@@ -847,11 +858,22 @@ export default function UserDashboard() {
                       const slotStartTime = booking.slots?.start_time ? new Date(booking.slots.start_time) : null;
                       const slotEndTime = booking.slots?.end_time ? new Date(booking.slots.end_time) : null;
                       
-                      // Apply same naming priority as PopularServices
+                      // Combine service name and business name
                       const businessName = booking.business_resources?.businesses?.name;
                       const servicePopularProducts = booking.business_resources?.services?.popular_products;
                       const resourceName = booking.business_resources?.name;
-                      const displayName = businessName || servicePopularProducts || resourceName || 'N/A';
+                      
+                      let displayName = 'N/A';
+                      if (servicePopularProducts && businessName) {
+                        displayName = `[${servicePopularProducts}] ${businessName}`;
+                      } else if (businessName) {
+                        displayName = businessName;
+                      } else if (servicePopularProducts) {
+                        displayName = servicePopularProducts;
+                      } else if (resourceName) {
+                        displayName = resourceName;
+                      }
+                      
                       const fieldName = resourceName || 'N/A';
                       
                       return (
@@ -984,11 +1006,22 @@ export default function UserDashboard() {
                             const slotStartTime = booking.slots?.start_time ? new Date(booking.slots.start_time) : null;
                             const slotEndTime = booking.slots?.end_time ? new Date(booking.slots.end_time) : null;
                             
-                            // Apply same naming priority as PopularServices
+                            // Combine service name and business name
                             const businessName = booking.business_resources?.businesses?.name;
                             const servicePopularProducts = booking.business_resources?.services?.popular_products;
                             const resourceName = booking.business_resources?.name;
-                            const displayName = businessName || servicePopularProducts || resourceName || 'N/A';
+                            
+                            let displayName = 'N/A';
+                            if (servicePopularProducts && businessName) {
+                              displayName = `[${servicePopularProducts}] ${businessName}`;
+                            } else if (businessName) {
+                              displayName = businessName;
+                            } else if (servicePopularProducts) {
+                              displayName = servicePopularProducts;
+                            } else if (resourceName) {
+                              displayName = resourceName;
+                            }
+                            
                             const fieldName = resourceName || 'N/A';
                             
                             return (
@@ -1077,11 +1110,22 @@ export default function UserDashboard() {
                       const slotStartTime = booking.slots?.start_time ? new Date(booking.slots.start_time) : null;
                       const slotEndTime = booking.slots?.end_time ? new Date(booking.slots.end_time) : null;
                       
-                      // Apply same naming priority as PopularServices
+                      // Combine service name and business name
                       const businessName = booking.business_resources?.businesses?.name;
                       const servicePopularProducts = booking.business_resources?.services?.popular_products;
                       const resourceName = booking.business_resources?.name;
-                      const displayName = businessName || servicePopularProducts || resourceName || 'N/A';
+                      
+                      let displayName = 'N/A';
+                      if (servicePopularProducts && businessName) {
+                        displayName = `[${servicePopularProducts}] ${businessName}`;
+                      } else if (businessName) {
+                        displayName = businessName;
+                      } else if (servicePopularProducts) {
+                        displayName = servicePopularProducts;
+                      } else if (resourceName) {
+                        displayName = resourceName;
+                      }
+                      
                       const fieldName = resourceName || 'N/A';
                       
                       return (
