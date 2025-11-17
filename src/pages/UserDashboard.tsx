@@ -209,6 +209,9 @@ export default function UserDashboard() {
               id,
               name,
               owner_id
+            ),
+            services (
+              popular_products
             )
           )
         `)
@@ -248,6 +251,9 @@ export default function UserDashboard() {
               id,
               name,
               owner_id
+            ),
+            services (
+              popular_products
             )
           )
         `)
@@ -758,12 +764,18 @@ export default function UserDashboard() {
                             
                             const slotStartTime = booking.slots?.start_time ? new Date(booking.slots.start_time) : null;
                             const slotEndTime = booking.slots?.end_time ? new Date(booking.slots.end_time) : null;
-                            const fieldName = booking.business_resources?.name || 'N/A';
+                            
+                            // Apply same naming priority as PopularServices
+                            const businessName = booking.business_resources?.businesses?.name;
+                            const servicePopularProducts = booking.business_resources?.services?.popular_products;
+                            const resourceName = booking.business_resources?.name;
+                            const displayName = businessName || servicePopularProducts || resourceName || 'N/A';
+                            const fieldName = resourceName || 'N/A';
                             
                             return (
                               <TableRow key={booking.id}>
                                 <TableCell className="font-medium">
-                                  {booking.business_resources?.name || 'N/A'}
+                                  {displayName}
                                 </TableCell>
                                 <TableCell>
                                   {slotStartTime ? (
@@ -834,7 +846,13 @@ export default function UserDashboard() {
                       
                       const slotStartTime = booking.slots?.start_time ? new Date(booking.slots.start_time) : null;
                       const slotEndTime = booking.slots?.end_time ? new Date(booking.slots.end_time) : null;
-                      const fieldName = booking.business_resources?.name || 'N/A';
+                      
+                      // Apply same naming priority as PopularServices
+                      const businessName = booking.business_resources?.businesses?.name;
+                      const servicePopularProducts = booking.business_resources?.services?.popular_products;
+                      const resourceName = booking.business_resources?.name;
+                      const displayName = businessName || servicePopularProducts || resourceName || 'N/A';
+                      const fieldName = resourceName || 'N/A';
                       
                       return (
                         <Card key={booking.id}>
@@ -843,7 +861,7 @@ export default function UserDashboard() {
                               <div>
                                 <div className="font-medium text-sm">Service</div>
                                 <div className="font-semibold">
-                                  {booking.business_resources?.name || 'N/A'}
+                                  {displayName}
                                 </div>
                               </div>
                               <span className="px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded text-xs font-medium">
@@ -965,12 +983,18 @@ export default function UserDashboard() {
                             
                             const slotStartTime = booking.slots?.start_time ? new Date(booking.slots.start_time) : null;
                             const slotEndTime = booking.slots?.end_time ? new Date(booking.slots.end_time) : null;
-                            const fieldName = booking.business_resources?.name || 'N/A';
+                            
+                            // Apply same naming priority as PopularServices
+                            const businessName = booking.business_resources?.businesses?.name;
+                            const servicePopularProducts = booking.business_resources?.services?.popular_products;
+                            const resourceName = booking.business_resources?.name;
+                            const displayName = businessName || servicePopularProducts || resourceName || 'N/A';
+                            const fieldName = resourceName || 'N/A';
                             
                             return (
                               <TableRow key={booking.id}>
                                 <TableCell className="font-medium">
-                                  {booking.business_resources?.name || 'N/A'}
+                                  {displayName}
                                 </TableCell>
                                 <TableCell>
                                   {slotStartTime ? (
@@ -1052,7 +1076,13 @@ export default function UserDashboard() {
                       
                       const slotStartTime = booking.slots?.start_time ? new Date(booking.slots.start_time) : null;
                       const slotEndTime = booking.slots?.end_time ? new Date(booking.slots.end_time) : null;
-                      const fieldName = booking.business_resources?.name || 'N/A';
+                      
+                      // Apply same naming priority as PopularServices
+                      const businessName = booking.business_resources?.businesses?.name;
+                      const servicePopularProducts = booking.business_resources?.services?.popular_products;
+                      const resourceName = booking.business_resources?.name;
+                      const displayName = businessName || servicePopularProducts || resourceName || 'N/A';
+                      const fieldName = resourceName || 'N/A';
                       
                       return (
                         <Card key={booking.id}>
@@ -1061,7 +1091,7 @@ export default function UserDashboard() {
                               <div>
                                 <div className="font-medium text-sm">Service</div>
                                 <div className="font-semibold">
-                                  {booking.business_resources?.name || 'N/A'}
+                                  {displayName}
                                 </div>
                               </div>
                               <span className="px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded text-xs font-medium">
