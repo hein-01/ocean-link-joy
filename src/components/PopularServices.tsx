@@ -12,6 +12,7 @@ import { useAuth } from '@/hooks/useAuth';
 
 interface Service {
   id: string;
+  service_id?: number; // The actual integer service ID from services table
   business_id?: string | null;
   name: string;
   description?: string;
@@ -133,6 +134,7 @@ const PopularServices = () => {
 
           return {
             id: `service_${service.service_key || service.id}_${business?.id || 'no-business'}`,
+            service_id: service.id, // The actual integer service ID
             business_id: business?.id || null,
             name: displayName,
             business_name: business?.name,

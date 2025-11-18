@@ -25,6 +25,7 @@ import 'swiper/css/pagination';
 
 interface Service {
   id: string;
+  service_id?: number; // The actual integer service ID from services table
   business_id?: string | null;
   name: string;
   description?: string;
@@ -90,15 +91,9 @@ export const PopularServiceCard = ({ service }: PopularServiceCardProps) => {
   // Fetch resource count for futsal services
   useEffect(() => {
     const fetchResourceCount = async () => {
-      if (service.popular_products === 'Futsal Booking') {
+      if (service.popular_products === 'Futsal Booking' && service.service_id) {
         try {
-          // Parse service ID to number
-          const serviceId = typeof service.id === 'number' ? service.id : parseInt(service.id, 10);
-          
-          if (isNaN(serviceId)) {
-            console.error('Invalid service ID:', service.id);
-            return;
-          }
+          const serviceId = service.service_id;
 
           // Count business_resources for this service
           const { count, error: countError } = await supabase
