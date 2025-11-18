@@ -87,50 +87,48 @@ export const PopularServiceCard = ({ service }: PopularServiceCardProps) => {
     checkBookmarkStatus();
   }, [service.id]);
 
-  // Fetch slot count for futsal services
+  // Fetch resource count for futsal services
   useEffect(() => {
-    const fetchSlotCount = async () => {
+    const fetchResourceCount = async () => {
       if (service.popular_products === 'Futsal Booking') {
         try {
-          // Extract UUID from service ID if it has a prefix
-          const extractUUID = (id: string) => {
-            const parts = id.split('_');
-            const lastPart = parts[parts.length - 1];
-            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-            return uuidRegex.test(lastPart) ? lastPart : id;
-          };
+          // Parse service ID to number
+          const serviceId = typeof service.id === 'number' ? service.id : parseInt(service.id, 10);
+          
+          if (isNaN(serviceId)) {
+            console.error('Invalid service ID:', service.id);
+            return;
+          }
 
-          const businessId = extractUUID(service.id);
+          // Count business_resources for this service
+          const { count, error: countError } = await supabase
+            .from('business_resources')
+            .select('id', { count: 'exact', head: true })
+            .eq('service_id', serviceId);
 
-          // First get all business_resources for this service
+          if (countError) throw countError;
+          
+          setSlotCount(count || 0);
+
+          // Also get the first resource ID for deep-linking
           const { data: resources, error: resourceError } = await supabase
             .from('business_resources')
             .select('id')
-            .eq('business_id', businessId);
+            .eq('service_id', serviceId)
+            .limit(1);
 
           if (resourceError) throw resourceError;
-
+          
           if (resources && resources.length > 0) {
-            const resourceIds = resources.map(r => r.id);
-            // Remember the first resource to deep-link into availability
-            setFirstResourceId(resourceIds[0]);
-            
-            // Then count all slots for these resources
-            const { count, error: slotError } = await supabase
-              .from('slots')
-              .select('*', { count: 'exact', head: true })
-              .in('resource_id', resourceIds);
-
-            if (slotError) throw slotError;
-            setSlotCount(count || 0);
+            setFirstResourceId(resources[0].id);
           }
         } catch (error) {
-          console.error('Error fetching slot count:', error);
+          console.error('Error fetching resource count:', error);
         }
       }
     };
 
-    fetchSlotCount();
+    fetchResourceCount();
   }, [service.id, service.popular_products]);
 
   // Fetch schedule hours
