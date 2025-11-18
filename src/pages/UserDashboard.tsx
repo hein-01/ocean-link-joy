@@ -970,7 +970,7 @@ export default function UserDashboard() {
             <div className="animate-slide-up">
               <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
                 <Calendar className="h-5 w-5 text-primary" />
-                My Services & Bookings
+                Action Required: Pending Verification
               </h3>
               {loadingPendingBookings ? (
                 <LoadingSpinner />
